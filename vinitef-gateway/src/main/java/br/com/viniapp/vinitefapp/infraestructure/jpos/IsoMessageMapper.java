@@ -7,7 +7,9 @@ import org.jpos.iso.ISOMsg;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public final class IsoMessageMapper {
@@ -34,7 +36,7 @@ public final class IsoMessageMapper {
         requesIsoMsg.set(BitField.BIT_TRANSACTION_MONTH_DAY.getBit(), transactionDate.format(DateTimeFormatter.ofPattern("MMdd")));
         requesIsoMsg.set(BitField.BIT_CARD_EXP_DATE.getBit(), String.format("%02d", transaction.getExpYear()) + String.format("%02d", transaction.getExpMonth()));
         requesIsoMsg.set(BitField.BIT_ENTRY_MODE.getBit(), "051");
-        requesIsoMsg.set(BitField.BIT_MERCHANT_ID.getBit(), String.format("%015d", Integer.parseInt(merchantId)));
+        requesIsoMsg.set(BitField.BIT_MERCHANT_ID.getBit(), merchantId);
         requesIsoMsg.set(BitField.BIT_CVV.getBit(), transaction.getCvv());
         requesIsoMsg.set(BitField.BIT_HOLD_NAME.getBit(), transaction.getHolderName());
         requesIsoMsg.set(BitField.BIT_INSTALLMENT_NUMBER.getBit(), String.format("%02d", transaction.getInstallments()));
@@ -48,9 +50,8 @@ public final class IsoMessageMapper {
         transaction.setValue(new BigDecimal(responseMsg.getString(BitField.BIT_AMOUNT.getBit())).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
         transaction.setAuthorizationCode(responseMsg.getString(BitField.BIT_AUTHORIZATION_CODE.getBit()));
 
-        LocalDateTime transactionDate = LocalDateTime.parse(responseMsg.getString(BitField.BIT_TRANSACTION_DATETIME.getBit()), DateTimeFormatter.ofPattern("MMddHHmmss"));
-        transaction.setTransactionDate(transactionDate.toLocalDate());
-        transaction.setTransactionHour(transactionDate.toLocalTime());
+        transaction.setTransactionDate(LocalDate.parse(responseMsg.getString(BitField.BIT_TRANSACTION_MONTH_DAY.getBit()) + LocalDate.now().getYear(), DateTimeFormatter.ofPattern("MMddyyyy")));
+        transaction.setTransactionHour(LocalTime.parse(responseMsg.getString(BitField.BIT_TRANSACTION_HOUR.getBit()), DateTimeFormatter.ofPattern("HHmmss")));
         return transaction;
     }
 }

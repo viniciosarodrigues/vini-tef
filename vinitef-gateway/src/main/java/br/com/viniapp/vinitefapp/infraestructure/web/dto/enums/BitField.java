@@ -16,6 +16,7 @@ public enum BitField {
     BIT_ENTRY_MODE(22, MandatoryOrOptional.MANDATORY),
     BIT_AUTHORIZATION_CODE(38, MandatoryOrOptional.OPTIONAL),
     BIT_RESPONSE_CODE(39, MandatoryOrOptional.OPTIONAL),
+    BIT_TERMINAL_ID(41, MandatoryOrOptional.OPTIONAL),
     BIT_MERCHANT_ID(42, MandatoryOrOptional.MANDATORY),
     BIT_HOLD_NAME(43, MandatoryOrOptional.OPTIONAL),
     BIT_CVV(48, MandatoryOrOptional.OPTIONAL),

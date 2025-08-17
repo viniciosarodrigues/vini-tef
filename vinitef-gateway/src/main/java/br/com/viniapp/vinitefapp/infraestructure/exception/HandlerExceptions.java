@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +30,18 @@ public class HandlerExceptions {
         return ResponseEntity.status(e.getStatus()).body(err);
     }
 
+    @ExceptionHandler(SocketTimeoutException.class)
+    public ResponseEntity<StandardErrorSpring> timeoutException(SocketTimeoutException e, HttpServletRequest req) {
+        logger.error("Timeout", e);
+        StandardErrorSpring err = new StandardErrorSpring(System.currentTimeMillis(), HttpStatus.REQUEST_TIMEOUT.value(),
+                e.getMessage(), List.of(), "O servidor TEF VINI-TEF-SERVER demorou muito para responder a requisição", req.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(err);
+    }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<StandardErrorSpring> objetoNaoEncontrado(HttpMessageNotReadableException e,
-                                                                   HttpServletRequest req) {
+    public ResponseEntity<StandardErrorSpring> objectNotFound(HttpMessageNotReadableException e,
+                                                              HttpServletRequest req) {
         logger.error("Falha interna não esperada :: ", e);
         StandardErrorSpring err = new StandardErrorSpring(System.currentTimeMillis(),
                 HttpStatus.UNPROCESSABLE_ENTITY.value(), "Propriedade não reconhecida", List.of(),

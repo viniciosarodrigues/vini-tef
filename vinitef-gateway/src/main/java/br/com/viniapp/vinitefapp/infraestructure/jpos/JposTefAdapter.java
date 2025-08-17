@@ -41,7 +41,10 @@ public class JposTefAdapter implements TefProviderPort {
     }
 
     @Override
-    public Transaction processTransaction(final String merchantId, final Transaction transaction) {
+    public Transaction processTransaction(final String merchantId, final Transaction transaction) throws SocketTimeoutException {
+        if (merchantId == null || merchantId.isBlank()) {
+            throw new HttpException(HttpStatus.UNPROCESSABLE_ENTITY, "O cabeçalho (x-identifier) com o identificado do lojista deve ser informado");
+        }
         try (InputStream inputStream = resourceFile.getInputStream()) {
             ISOMsg isoMsg = IsoMessageMapper.toIsoMsg(merchantId, transaction);
 
@@ -54,19 +57,19 @@ public class JposTefAdapter implements TefProviderPort {
 
             logger.info("Enviando mensagem ISO 8583...");
             isoMsg.setPackager(packager);
-            logMessage(isoMsg);
-            logger.info(new String(isoMsg.pack()));
             channel.send(isoMsg);
 
             logger.info("Aguardando resposta...");
             ISOMsg responseMsg = channel.receive();
+            logMessage(responseMsg);
             channel.disconnect();
             logger.info("Desconectado.");
 
             return IsoMessageMapper.toTransaction(responseMsg);
-        } catch (SocketTimeoutException timeoutException) {
-            throw new HttpException(HttpStatus.GATEWAY_TIMEOUT, "VINI-TEF-SERVER demorou muito para responder, a conexão foi encerrada", timeoutException);
         } catch (ISOException | IOException e) {
+            if (e instanceof SocketTimeoutException timeoutException) {
+                throw timeoutException;
+            }
             throw new HttpException(HttpStatus.INTERNAL_SERVER_ERROR, "Falha ao enviar mensagem ISO 8583 para o VINI-TEF-SERVER.", e);
         }
     }

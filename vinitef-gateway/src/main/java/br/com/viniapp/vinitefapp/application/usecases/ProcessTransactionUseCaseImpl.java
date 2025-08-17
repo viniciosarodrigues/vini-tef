@@ -4,6 +4,8 @@ import br.com.viniapp.vinitefapp.domain.Transaction;
 import br.com.viniapp.vinitefapp.domain.ports.in.ProcessTransactionUseCase;
 import br.com.viniapp.vinitefapp.domain.ports.out.TefProviderPort;
 
+import java.net.SocketTimeoutException;
+
 public class ProcessTransactionUseCaseImpl implements ProcessTransactionUseCase {
 
     private final TefProviderPort tefProviderPort;
@@ -13,7 +15,7 @@ public class ProcessTransactionUseCaseImpl implements ProcessTransactionUseCase 
     }
 
     @Override
-    public Transaction execute(final String merchantId, final Transaction transaction) {
+    public Transaction execute(final String merchantId, final Transaction transaction) throws SocketTimeoutException {
         return tefProviderPort.processTransaction(merchantId, transaction);
     }
 }

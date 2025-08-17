@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class ISOMessageProcessor implements ISORequestListener {
     private static final Logger logger = LoggerFactory.getLogger(ISOMessageProcessor.class);
@@ -45,7 +43,6 @@ public class ISOMessageProcessor implements ISORequestListener {
             } else {
                 response.setMTI(MIT_NOT_SUPPORTED_REQUEST_RESPONSE_COD);
                 response.set(BitField.BIT_RESPONSE_CODE.getBit(), GENERIC_ERROR_RESPONSE_CODE);
-                response.set(BitField.BIT_TRANSACTION_DATETIME.getBit(), LocalDate.now().format(DateTimeFormatter.ofPattern("MMddHHmmss")));
                 logger.warn("MTI {} não suportado. Respondendo com erro.", request.getMTI());
             }
             response.set(BitField.BIT_NSU_HOST.getBit(), getNsuHost());
