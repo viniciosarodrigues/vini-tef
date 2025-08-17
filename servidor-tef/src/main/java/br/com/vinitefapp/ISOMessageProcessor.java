@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class ISOMessageProcessor implements ISORequestListener {
     private static final Logger logger = LoggerFactory.getLogger(ISOMessageProcessor.class);
@@ -18,9 +20,9 @@ public class ISOMessageProcessor implements ISORequestListener {
     private final static String MIT_SALE_RESPONSE_COD = "0210";
     private final static String MIT_NOT_SUPPORTED_REQUEST_RESPONSE_COD = "0810";
 
-    private final static String SUCCESS_RESPONSE_CODE = "000";
-    private final static String REFUSED_RESPONSE_CODE = "051";
-    private final static String GENERIC_ERROR_RESPONSE_CODE = "005";
+    private final static String SUCCESS_RESPONSE_CODE = "00";
+    private final static String REFUSED_RESPONSE_CODE = "51";
+    private final static String GENERIC_ERROR_RESPONSE_CODE = "05";
     private static Integer _authorizationCode = 0;
     private static Integer _nsuHost = 0;
 
@@ -40,14 +42,10 @@ public class ISOMessageProcessor implements ISORequestListener {
                     response.set(BitField.BIT_AUTHORIZATION_CODE.getBit(), getAuthorizationCode());
                 }
                 response.set(BitField.BIT_RESPONSE_CODE.getBit(), responseCode);
-                response.set(BitField.BIT_AMOUNT.getBit(), request.getString(BitField.BIT_AMOUNT.getBit()));
-                response.set(BitField.BIT_TRANSACTION_DATETIME.getBit(), request.getString(BitField.BIT_TRANSACTION_DATETIME.getBit()));
-                response.set(BitField.BIT_TRANSACTION_NSU.getBit(), request.getString(BitField.BIT_TRANSACTION_NSU.getBit()));
-                response.set(BitField.BIT_TRANSACTION_HOUR.getBit(), request.getString(BitField.BIT_TRANSACTION_DATETIME.getBit()));
-                response.set(BitField.BIT_MERCHANT_ID.getBit(), request.getString(BitField.BIT_TRANSACTION_DATETIME.getBit()));
             } else {
                 response.setMTI(MIT_NOT_SUPPORTED_REQUEST_RESPONSE_COD);
                 response.set(BitField.BIT_RESPONSE_CODE.getBit(), GENERIC_ERROR_RESPONSE_CODE);
+                response.set(BitField.BIT_TRANSACTION_DATETIME.getBit(), LocalDate.now().format(DateTimeFormatter.ofPattern("MMddHHmmss")));
                 logger.warn("MTI {} não suportado. Respondendo com erro.", request.getMTI());
             }
             response.set(BitField.BIT_NSU_HOST.getBit(), getNsuHost());

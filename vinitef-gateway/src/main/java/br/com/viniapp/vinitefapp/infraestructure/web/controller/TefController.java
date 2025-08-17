@@ -1,0 +1,30 @@
+package br.com.viniapp.vinitefapp.infraestructure.web.controller;
+
+import br.com.viniapp.vinitefapp.domain.Transaction;
+import br.com.viniapp.vinitefapp.domain.ports.in.ProcessTransactionUseCase;
+import br.com.viniapp.vinitefapp.infraestructure.web.dto.TransactionRequest;
+import br.com.viniapp.vinitefapp.infraestructure.web.dto.TransactionResponse;
+import br.com.viniapp.vinitefapp.infraestructure.web.mapper.TransactionDtoMapper;
+import br.com.viniapp.vinitefapp.infraestructure.web.util.RequestContextUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class TefController {
+    private final ProcessTransactionUseCase processTransactionUseCase;
+
+    public TefController(final ProcessTransactionUseCase processTransactionUseCase) {
+        this.processTransactionUseCase = processTransactionUseCase;
+    }
+
+    @PostMapping("authorization")
+    public ResponseEntity<TransactionResponse> createTransaction(@RequestBody TransactionRequest request, HttpServletRequest httpServletRequest) {
+        Transaction transaction = TransactionDtoMapper.toDomain(request);
+        Transaction result = processTransactionUseCase.execute(httpServletRequest.getHeader(RequestContextUtil.MERCHANT_ID_HEADER_KEY), transaction);
+        TransactionResponse response = TransactionDtoMapper.toResponse(result);
+        return ResponseEntity.ok(response);
+    }
+}
