@@ -43,7 +43,7 @@ public class JposTefAdapter implements TefProviderPort {
     @Override
     public Transaction processTransaction(final String merchantId, final Transaction transaction) throws SocketTimeoutException {
         if (merchantId == null || merchantId.isBlank()) {
-            throw new HttpException(HttpStatus.UNPROCESSABLE_ENTITY, "O cabeçalho (x-identifier) com o identificado do lojista deve ser informado");
+            throw new HttpException(HttpStatus.UNPROCESSABLE_ENTITY, "O cabeçalho (x-identifier) com o identificador do lojista deve ser informado");
         }
         try (InputStream inputStream = resourceFile.getInputStream()) {
             ISOMsg isoMsg = IsoMessageMapper.toIsoMsg(merchantId, transaction);
