@@ -69,13 +69,12 @@ public class ISOMessageProcessor implements ISORequestListener {
 
     private String getResponseCode(ISOMsg request) throws InterruptedException {
         String amountStr = request.getString(BitField.BIT_AMOUNT.getBit());
-        long amountLongValue = Long.parseLong(amountStr);
-        double amountDoubleValue = amountLongValue / 100.0;
-        if (amountDoubleValue > 1000.00) {
+        double amountValue = Long.parseLong(amountStr) / 100.0;
+        if (amountValue > 1000.00) {
             long delay = 15000;
             Thread.sleep(delay);
             return null;
-        } else if (amountLongValue % 2 == 0) {
+        } else if (amountValue % 2 == 0) {
             return SUCCESS_RESPONSE_CODE;
         } else {
             return REFUSED_RESPONSE_CODE;
