@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: vinitef-gateway
+
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+tef:
+  server:
+    host: 127.0.0.1
+    port: 8000
+    timeout: 10000
