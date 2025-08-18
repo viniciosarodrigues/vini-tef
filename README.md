@@ -51,7 +51,7 @@ O sistema segue uma arquitetura de microsserviços desacoplada, onde o `gateway`
 
 ## 🚀 Como Executar o Projeto
 
-Para executar o ambiente completo, você precisará ter o **JDK 21+** e o **Maven** instalados.
+Para executar o ambiente completo, você precisará ter o **JDK 22+** e o **Maven** instalados.
 
 ### 1. Servidor TEF (`servidor-tef`)
 
