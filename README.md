@@ -121,22 +121,9 @@ curl --location 'http://localhost:8080/authorization' \
 }'
 ```
 
-### Exemplo de Resposta não autorizado (Sucesso)
-
-Para testar o cenário de não autorizado, envie uma transação com valor superior ímpar. A API retornará um erro `200 OK` mas com o `authorization_code` nulo.
-
-```json
-{
-  "value": 251.00,
-  "payment_id": "0000000004",
-  "response_code": "51",
-  "authorization_code": null,
-  "transaction_date": "2025-08-18",
-  "transaction_hour": "03:16:49"
-}
-```
-
 ### Exemplo de Resposta (Sucesso)
+
+Para testar o cenário de autorizado, envie uma transação com valor par.
 
 ```json
 {
@@ -146,6 +133,21 @@ Para testar o cenário de não autorizado, envie uma transação com valor super
   "authorization_code": "000001",
   "transaction_date": "2025-08-18",
   "transaction_hour": "03:16:05"
+}
+```
+
+### Exemplo de Resposta não autorizado (Sucesso)
+
+Para testar o cenário de não autorizado, envie uma transação com valor ímpar. A API retornará um erro `200 OK` mas com o `authorization_code` nulo.
+
+```json
+{
+  "value": 251.00,
+  "payment_id": "0000000004",
+  "response_code": "51",
+  "authorization_code": null,
+  "transaction_date": "2025-08-18",
+  "transaction_hour": "03:16:49"
 }
 ```
 
