@@ -2,8 +2,8 @@ package br.com.viniapp.vinitefapp.infraestructure.web.controller;
 
 import br.com.viniapp.vinitefapp.domain.Transaction;
 import br.com.viniapp.vinitefapp.domain.ports.in.ProcessTransactionUseCase;
-import br.com.viniapp.vinitefapp.infraestructure.web.dto.TransactionRequest;
-import br.com.viniapp.vinitefapp.infraestructure.web.dto.TransactionResponse;
+import br.com.viniapp.vinitefapp.infraestructure.web.dto.AuthorizationRequest;
+import br.com.viniapp.vinitefapp.infraestructure.web.dto.AuthorizationResponse;
 import br.com.viniapp.vinitefapp.infraestructure.web.mapper.TransactionDtoMapper;
 import br.com.viniapp.vinitefapp.infraestructure.web.util.RequestContextUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,10 +24,10 @@ public class TefController {
     }
 
     @PostMapping("authorization")
-    public ResponseEntity<TransactionResponse> createTransaction(@Validated @RequestBody TransactionRequest request, HttpServletRequest httpServletRequest) throws SocketTimeoutException {
+    public ResponseEntity<AuthorizationResponse> createTransaction(@Validated @RequestBody AuthorizationRequest request, HttpServletRequest httpServletRequest) throws SocketTimeoutException {
         Transaction transaction = TransactionDtoMapper.toDomain(request);
         Transaction result = processTransactionUseCase.execute(httpServletRequest.getHeader(RequestContextUtil.MERCHANT_ID_HEADER_KEY), transaction);
-        TransactionResponse response = TransactionDtoMapper.toResponse(result);
+        AuthorizationResponse response = TransactionDtoMapper.toResponse(result);
         return ResponseEntity.ok(response);
     }
 }

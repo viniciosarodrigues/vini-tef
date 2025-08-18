@@ -19,6 +19,7 @@ public class Transaction {
     private Integer expMonth;
     private String holderName;
     private Integer expYear;
+    private String paymentId;
     private String responseCode;
     private String authorizationCode;
     private LocalDate transactionDate;

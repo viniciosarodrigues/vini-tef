@@ -46,6 +46,7 @@ public final class IsoMessageMapper {
 
     public static Transaction toTransaction(ISOMsg responseMsg) {
         Transaction transaction = new Transaction();
+        transaction.setPaymentId(responseMsg.getString(BitField.BIT_NSU_HOST.getBit()));
         transaction.setResponseCode(responseMsg.getString(BitField.BIT_RESPONSE_CODE.getBit()));
         transaction.setValue(new BigDecimal(responseMsg.getString(BitField.BIT_AMOUNT.getBit())).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
         transaction.setAuthorizationCode(responseMsg.getString(BitField.BIT_AUTHORIZATION_CODE.getBit()));
