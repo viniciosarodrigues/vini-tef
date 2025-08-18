@@ -101,13 +101,13 @@ Você pode usar ferramentas como Postman, Insomnia ou `curl` para interagir com 
 * **URL**: `POST http://localhost:8080/authorization`
 * **Headers**:
     * `Content-Type`: `application/json`
-    * `x-identifier`: `{merchant_id}` (Ex: `123456789012345`)
+    * `x-identifier`: `{merchant_id}` (Ex: `MERCADOR123`)
 
 ### Exemplo de Requisição (`curl`)
 
 ```bash
 curl --location 'http://localhost:8080/authorization' \
---header 'x-identifier: 123456789012345' \
+--header 'x-identifier: MERCADOR123' \
 --header 'Content-Type: application/json' \
 --data '{
     "external_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
